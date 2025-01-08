@@ -1,6 +1,7 @@
 import java.util.*;
 
 public class FS25 {
+    /* Program to manage the fields and vehicles easy for FS25 */
     public static void main(String[] args) {
         Scanner inputScanner = new Scanner(System.in);
         String selection = mainMenu(inputScanner);
