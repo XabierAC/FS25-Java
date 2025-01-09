@@ -83,7 +83,23 @@ public class FS25 {
 
     /* Adds a new field to the list */
     public static void addField(Scanner inputScanner) {
-
+        int idField;
+        int statusId;
+        String statusString;
+        String fieldCrop;
+        System.out.println("Entendido.\nVamos a agregar un nuevo campo a la lista.");
+        System.out.println("Cual es el numero del campo que quieres agregar?");
+        idField = Integer.parseInt(inputScanner.nextLine());
+        System.out.println("Cual es el estado actual del campo?");
+        statusString = inputScanner.nextLine();
+        statusId = fieldStatusId(statusString.toUpperCase());
+        if (statusId < 6 || statusId == 10) {
+            System.out.println("Que producto vas a plantar?");
+            fieldCrop = inputScanner.nextLine();
+        } else {
+            System.out.println("Que producto hay plantado?");
+            fieldCrop = inputScanner.nextLine();
+        }
     }
 
     /* Modifies the info of one of the fields in the list */
@@ -109,5 +125,32 @@ public class FS25 {
     /* Deletes one of the vehicle in the list */
     public static void deleteVehicle(Scanner inputScanner) {
 
+    }
+
+    /* Transforms String from fieldStatus input to a number for status identification */
+    public static int fieldStatusId(String fieldStatus) {
+        int statusId = 0;
+        if (fieldStatus.equals("DESMENUZADO")) {
+            statusId = 1;
+        } else if (fieldStatus.equals("CON CAL")) {
+            statusId = 2;
+        } else if (fieldStatus.equals("ABONO 1")) {
+            statusId = 3;
+        } else if (fieldStatus.equals("ARADO") || fieldStatus.equals("CULTIVADO")) {
+            statusId = 4;
+        } else if (fieldStatus.equals("SEMBRADO")) {
+            statusId = 5;
+        } else if (fieldStatus.equals("ABONO 2")) {
+            statusId = 6;
+        } else if (fieldStatus.equals("RODILLO")) {
+            statusId = 7;
+        } else if (fieldStatus.equals("CON MALAS HIERBAS")) {
+            statusId = 8;
+        } else if (fieldStatus.equals("LISTO PARA COSECHAR")) {
+            statusId = 9;
+        } else if (fieldStatus.equals("COSECHADO")) {
+            statusId = 10;
+        }
+        return statusId;
     }
 }
