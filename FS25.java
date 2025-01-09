@@ -1,8 +1,11 @@
 import java.util.*;
-
+import java.io.*;
 public class FS25 {
+    static int idField;
+    static int statusId;
+    static String fieldCrop;
     /* Program to manage the fields and vehicles easy for FS25 */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         Scanner inputScanner = new Scanner(System.in);
         String selection = mainMenu(inputScanner);
         if (selection.startsWith("C")) {
@@ -34,7 +37,9 @@ public class FS25 {
     }
 
     /* Shows the selectable menu to work with fields info */
-    public static void fieldMenu(Scanner inpuScanner) {
+    public static void fieldMenu(Scanner inpuScanner) throws FileNotFoundException {
+        File fileInputField = new File("/Users/xabierac/Developer/Visual Studio Code/FS25 Java/field.txt");
+        File fileCopyField = new File("/Users/xabierac/Developer/Visual Studio Code/FS25 Java/fieldCopy.txt");
         boolean option = false;
         while (!option) {
             System.out.println("****CAMPOS****");
@@ -44,17 +49,17 @@ public class FS25 {
             System.out.println("(E)liminar un campo)");
             String selection = inpuScanner.nextLine().toUpperCase();
             if (selection.startsWith("A")) {
-                addField(inpuScanner);
+                addField(inpuScanner, fileInputField, fileCopyField);
             } else if (selection.startsWith("M")) {
-                modifyField(inpuScanner);
+                modifyField(inpuScanner, fileInputField, fileCopyField);
             } else if (selection.startsWith("E")) {
-                deleteField(inpuScanner);
+                deleteField(inpuScanner, fileInputField, fileCopyField);
             } else {
                 System.out.println("El texto introducido no es valido.\nVuelve a intentarlo.");
                 System.out.println();
-            } 
+            }
         }
-
+        fileCopyField.delete();
     }
 
     /* Shows the selecable menu to work with vehicle info  */
@@ -82,11 +87,10 @@ public class FS25 {
     }
 
     /* Adds a new field to the list */
-    public static void addField(Scanner inputScanner) {
-        int idField;
-        int statusId;
+    public static void addField(Scanner inputScanner, File fileinputField, File fileCopyField) throws FileNotFoundException {
+        Scanner inputFileScanner = new Scanner(fileinputField);
+        PrintStream writePS = new PrintStream(fileCopyField);
         String statusString;
-        String fieldCrop;
         System.out.println("Entendido.\nVamos a agregar un nuevo campo a la lista.");
         System.out.println("Cual es el numero del campo que quieres agregar?");
         idField = Integer.parseInt(inputScanner.nextLine());
@@ -100,15 +104,36 @@ public class FS25 {
             System.out.println("Que producto hay plantado?");
             fieldCrop = inputScanner.nextLine();
         }
+        String field = idField + " " + statusId + " " + fieldCrop;
+        while (inputFileScanner.hasNextLine()) {
+            String copyField = inputFileScanner.nextLine();
+            if (copyField.equals(" ") || idField < stringToInt(copyField)) {
+                writePS.println(field);
+                writePS.println(copyField);
+            }
+        }
+        writePS.close();
+        inputFileScanner.close();
+
     }
 
     /* Modifies the info of one of the fields in the list */
-    public static void modifyField(Scanner inputScanner) {
-
+    public static void modifyField(Scanner inputScanner, File fileinputField, File fileCopyField) {
+        String input;
+        System.out.println("La información de qué campo quieres modificar?");
+        idField = Integer.parseInt(inputScanner.nextLine());
+        System.out.println("Que quieres modificar?");
+        if (inputScanner.nextLine().equals("Cosecha")) {
+            System.out.println("Cual es el nuevo dato?");
+            input = inputScanner.nextLine();
+        } else if (inputScanner.nextLine().equals("Estado del campo")) {
+            System.out.println("Cual es el nuevo dato?");
+            input = inputScanner.nextLine();
+        }
     }
 
     /* Deletes a field from the list */
-    public static void deleteField(Scanner inputScanner) {
+    public static void deleteField(Scanner inputScanner, File fileinputField, File fileCopyField) {
 
     }
 
@@ -152,5 +177,20 @@ public class FS25 {
             statusId = 10;
         }
         return statusId;
+    }
+
+    /* Transforms String from crop input to a number for identification */
+    public static int cropId() {
+        int result = 0;
+
+        return result;
+    }
+
+    /* Converts from String to int */
+    public static int stringToInt(String frase) {
+        Scanner fraseScanner = new Scanner(frase);
+        int number = Integer.parseInt(fraseScanner.next());
+        fraseScanner.close();
+        return number;
     }
 }
