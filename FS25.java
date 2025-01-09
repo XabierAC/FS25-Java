@@ -81,26 +81,32 @@ public class FS25 {
 
     }
 
+    /* Adds a new field to the list */
     public static void addField(Scanner inputScanner) {
 
     }
 
+    /* Modifies the info of one of the fields in the list */
     public static void modifyField(Scanner inputScanner) {
 
     }
 
+    /* Deletes a field from the list */
     public static void deleteField(Scanner inputScanner) {
 
     }
 
+    /* Adds a new vehicle to the list */
     public static void addVehicle(Scanner inputScanner) {
 
     }
 
+    /* Modifies the info of one of the vehicle in the list */
     public static void modifyVehicle(Scanner inputScanner) {
 
     }
 
+    /* Deletes one of the vehicle in the list */
     public static void deleteVehicle(Scanner inputScanner) {
 
     }
