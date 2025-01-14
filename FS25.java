@@ -76,11 +76,14 @@ public class FS25 {
         String statusString;
         int cropId = 0;
         boolean copied = false;
+        consolePS.println();
         consolePS.println("Vamos a agregar un nuevo campo a la lista.");
         consolePS.println("Cual es el numero del campo que quieres agregar?");
         idField = Integer.parseInt(inputScanner.nextLine());
+        consolePS.println();
         consolePS.println("Cual es el estado actual del campo?");
         statusString = inputScanner.nextLine();
+        consolePS.println();
         statusId = fieldStatusToInt(statusString.toUpperCase());
         if (statusId > 4 && statusId < 11) {
             consolePS.println("Que producto hay plantado?");
@@ -105,6 +108,7 @@ public class FS25 {
         if (!copied) {
             filePS.println(newField);
         }
+        consolePS.println();
         filePS.close();
         inputFileScanner.close();
         inputFileScanner = new Scanner(fileCopyField);
@@ -125,12 +129,14 @@ public class FS25 {
         boolean modified = false;
         consolePS.println("Que campo es el que quieres modificar?");
         int fieldToModify = Integer.parseInt(inputScanner.nextLine());
+        consolePS.println();
         while (inputFileScanner.hasNextLine()) {
             String inputFieldString = inputFileScanner.nextLine();
             int inputFieldInt = stringToInt(inputFieldString, 1);
             if(inputFieldInt == fieldToModify){
                 consolePS.println("Que quieres modificar?");
                 String inputString = inputScanner.nextLine().toUpperCase();
+                consolePS.println();
                 if (inputString.startsWith("P")) {
                     String status = fieldStatusToString(stringToInt(inputFieldString, 2));
                     consolePS.println("El anterior estado era " + status + ". Cual es el nuevo estado?");
@@ -138,6 +144,7 @@ public class FS25 {
                     String newLine = stringToInt(inputFieldString, 1) + " " + newIntStatus + " " + stringToInt(inputFieldString, 3);
                     filePS.println(newLine);
                     modified = true;
+                    consolePS.println();
                 } else if (inputString.startsWith("C")) {
                     String cropString = cropToString(stringToInt(inputFieldString, 3));
                     consolePS.println("La anterior cosecha era " + cropString + ". Cual es la nueva cosecha?");
@@ -145,6 +152,7 @@ public class FS25 {
                     String newLine = stringToInt(inputFieldString, 1) + " " + stringToInt(inputFieldString, 2) + " " + newIntCrop;
                     filePS.println(newLine);
                     modified = true;
+                    consolePS.println();
                 }
             } else {
                 filePS.println(inputFieldString);
@@ -153,8 +161,10 @@ public class FS25 {
         }
         if (modified) {
             consolePS.println("Los datos han sido modificados correctamente.");
+            consolePS.println();
         } else {
             consolePS.println("Los datos no han podido ser modificados.");
+            consolePS.println();
         }
         filePS.close();
         inputFileScanner.close();
@@ -179,7 +189,9 @@ public class FS25 {
             String inputFieldString = inputFileScanner.nextLine();
             int inputFieldInt = stringToInt(inputFieldString, 1);
             if (inputFieldInt == fieldToDelete) {
+                consolePS.println();
                 consolePS.println("El campo ha sido eliminado correctamente");
+                consolePS.println();
             } else {
                 filePS.println(inputFieldString);
             }
