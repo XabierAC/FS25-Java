@@ -74,7 +74,7 @@ public class FS25 {
 
     /* Shows the selectable menu to work with fields info */
     public static void fieldMenu(Scanner inpuScanner, String game) throws FileNotFoundException {
-        File fileInputField = new File("/Users/xabierac/Developer/Visual Studio Code/FS25 Java/field.txt");
+        File fileInputField = new File("/Users/xabierac/Developer/Visual Studio Code/FS25 Java/field" + game + ".txt");
         File fileCopyField = new File("/Users/xabierac/Developer/Visual Studio Code/FS25 Java/fieldCopy.txt");
         boolean option = false;
         while (!option) {
