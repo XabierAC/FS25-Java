@@ -9,14 +9,48 @@ public class FS25 {
     /* Program to manage the fields and vehicles easy for FS25 */
     public static void main(String[] args) throws FileNotFoundException {
         Scanner inputScanner = new Scanner(System.in);
+        String game = gameSelect(inputScanner);
         String selection = mainMenu(inputScanner);
         if (selection.startsWith("C")) {
-            fieldMenu(inputScanner);
+            fieldMenu(inputScanner, game);
         } else if (selection.startsWith("V")) {
-            vehicleMenu(inputScanner);
+            vehicleMenu(inputScanner, game);
         }else {
             consolePS.println("Fin");
         }
+    }
+
+    public static String gameSelect(Scanner inputScanner) {
+        String input = "";
+        boolean correctInput = false;
+        consolePS.println("En que partida vas a jugar?");
+        while (!correctInput) {
+            input = inputScanner.nextLine().toUpperCase();
+            if (input.startsWith("R")) {
+                input = "RiverbendSprings";
+                consolePS.println();
+                consolePS.println("Partida elegida correctamente. Pasalo bien.");
+                consolePS.println();
+                correctInput = true;
+            } else if (input.startsWith("H")) {
+                input = "HutanPantai";
+                consolePS.println();
+                consolePS.println("Partida elegida correctamente. Pasalo bien.");
+                consolePS.println();
+                correctInput = true;
+            }else if (input.startsWith("Z")) {
+                input = "Zielonka";
+                consolePS.println();
+                consolePS.println("Partida elegida correctamente. Pasalo bien.");
+                consolePS.println();
+                correctInput = true;
+            } else {
+                consolePS.println();
+                consolePS.println("La partida introducido no es existe. Vuelve a intentarlo:");
+            }
+        }
+        
+        return input;
     }
 
     /* shows the main menu and takes the input from the keyboard */
@@ -39,7 +73,7 @@ public class FS25 {
     }
 
     /* Shows the selectable menu to work with fields info */
-    public static void fieldMenu(Scanner inpuScanner) throws FileNotFoundException {
+    public static void fieldMenu(Scanner inpuScanner, String game) throws FileNotFoundException {
         File fileInputField = new File("/Users/xabierac/Developer/Visual Studio Code/FS25 Java/field.txt");
         File fileCopyField = new File("/Users/xabierac/Developer/Visual Studio Code/FS25 Java/fieldCopy.txt");
         boolean option = false;
@@ -225,6 +259,7 @@ public class FS25 {
             }
         }
         consolePS.println();
+        inputFileScanner.close();
     }
 
     /* Transforms String from fieldStatus input to a number for status identification */
@@ -403,7 +438,7 @@ public class FS25 {
         return crop;
     }
     /* Shows the selecable menu to work with vehicle info  */
-    public static void vehicleMenu(Scanner inpuScanner) {
+    public static void vehicleMenu(Scanner inpuScanner, String game) {
         boolean option = false;
         while (!option) {
             consolePS.println("****VEHICULOS****");
