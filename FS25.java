@@ -82,7 +82,7 @@ public class FS25 {
         consolePS.println("Cual es el estado actual del campo?");
         statusString = inputScanner.nextLine();
         statusId = fieldStatusToInt(statusString.toUpperCase());
-        if (statusId > 5 && statusId < 10) {
+        if (statusId > 5 && statusId < 11) {
             consolePS.println("Que producto hay plantado?");
             fieldCrop = inputScanner.nextLine().toUpperCase();
             cropId = cropToInt(fieldCrop);
@@ -95,7 +95,7 @@ public class FS25 {
         String newField = idField + " " + statusId + " " + cropId;
         while (inputFileScanner.hasNextLine()) {
             String oldField = inputFileScanner.nextLine();
-            int oldFieldInt = stringToInt(oldField);
+            int oldFieldInt = stringToInt(oldField, 1);
             if (!copied && idField < oldFieldInt) {
                 filePS.println(newField);
                 copied = true;
@@ -119,19 +119,54 @@ public class FS25 {
     }
 
     /* Modifies the info of one of the fields in the list */
-    public static void modifyField(Scanner inputScanner, File fileInputField, File fileCopyField) {
-        String input;
-        consolePS.println("La información de qué campo quieres modificar?");
-        idField = Integer.parseInt(inputScanner.nextLine());
-        consolePS.println("Que quieres modificar?");
-        if (inputScanner.nextLine().equals("Cosecha")) {
-            consolePS.println("Cual es el nuevo dato?");
-            input = inputScanner.nextLine();
-        } else if (inputScanner.nextLine().equals("Estado del campo")) {
-            consolePS.println("Cual es el nuevo dato?");
-            input = inputScanner.nextLine();
+    public static void modifyField(Scanner inputScanner, File fileInputField, File fileCopyField) throws FileNotFoundException{
+        Scanner inputFileScanner = new Scanner(fileInputField);
+        PrintStream filePS = new PrintStream(fileCopyField);
+        boolean modified = false;
+        consolePS.println("Que campo es el que quieres modificar?");
+        int fieldToModify = Integer.parseInt(inputScanner.nextLine());
+        while (inputFileScanner.hasNextLine()) {
+            String inputFieldString = inputFileScanner.nextLine();
+            int inputFieldInt = stringToInt(inputFieldString, 1);
+            if(inputFieldInt == fieldToModify){
+                consolePS.println("Que quieres modificar?");
+                String inputString = inputScanner.nextLine().toUpperCase();
+                if (inputString.startsWith("P")) {
+                    String status = fieldStatusToString(stringToInt(inputFieldString, 2));
+                    consolePS.println("El anterior estado era " + status + ". Cual es el nuevo estado?");
+                    int newIntStatus = fieldStatusToInt(inputScanner.nextLine().toUpperCase());
+                    String newLine = stringToInt(inputFieldString, 1) + " " + newIntStatus + " " + stringToInt(inputFieldString, 3);
+                    filePS.println(newLine);
+                    modified = true;
+                } else if (inputString.startsWith("C")) {
+                    String cropString = cropToString(stringToInt(inputFieldString, 3));
+                    consolePS.println("La anterior cosecha era " + cropString + ". Cual es la nueva cosecha?");
+                    int newIntCrop = cropToInt(inputScanner.nextLine().toUpperCase());
+                    String newLine = stringToInt(inputFieldString, 1) + " " + stringToInt(inputFieldString, 2) + " " + newIntCrop;
+                    filePS.println(newLine);
+                    modified = true;
+                }
+            } else {
+                filePS.println(inputFieldString);
+            }
+
         }
-        
+        if (modified) {
+            consolePS.println("Los datos han sido modificados correctamente.");
+        } else {
+            consolePS.println("Los datos no han podido ser modificados.");
+        }
+        filePS.close();
+        inputFileScanner.close();
+        inputFileScanner = new Scanner(fileCopyField);
+        filePS = new PrintStream(fileInputField);
+        while (inputFileScanner.hasNextLine()) {
+            String line = inputFileScanner.nextLine();
+            filePS.println(line);
+        }
+        inputFileScanner.close();
+        filePS.close();
+        fileCopyField.delete();
     }
 
     /* Deletes a field from the list */
@@ -163,18 +198,53 @@ public class FS25 {
             statusId = 7;
         } else if (fieldStatus.equals("CON MALAS HIERBAS")) {
             statusId = 8;
-        } else if (fieldStatus.equals("LISTO PARA COSECHAR")) {
+        } else if (fieldStatus.equals("CULTIVANDO")) {
             statusId = 9;
-        } else if (fieldStatus.equals("COSECHADO")) {
+        } else if (fieldStatus.equals("LISTO PARA COSECHAR")) {
             statusId = 10;
+        } else if (fieldStatus.equals("COSECHADO")) {
+            statusId = 11;
         }
         return statusId;
     }
     
+    /* Transforms int from number input to a String of the satuts of the field */
+    public static String fieldStatusToString(int number) {
+        String status = "";
+        if (number == 1) {
+            status = "Desmenuzado";
+        } else if (number == 2) {
+            status = "Con cal";
+        } else if (number == 3) {
+            status = "Abono 1";
+        } else if (number == 4) {
+            status = "Arado o Cultivado";
+        } else if (number == 5) {
+            status = "Sembrado";
+        } else if (number == 6) {
+            status = "Abono 2";
+        } else if (number == 7) {
+            status = "Rodillo";
+        } else if (number == 8) {
+            status = "Con Malas Hierbas";
+        } else if (number == 9) {
+            status = "Cultivando";
+        } else if (number == 10) {
+            status = "Listo para Cosechar";
+        } else if (number == 11) {
+            status = "Cosechado";
+        }
+        return status;
+    }
     /* Converts from String to int */
-    public static int stringToInt(String frase) {
+    public static int stringToInt(String frase, int repeat) {
         Scanner fraseScanner = new Scanner(frase);
-        int number = Integer.parseInt(fraseScanner.next());
+        int count = 0;
+        int number = 0;
+        while (count < repeat) {
+            number = Integer.parseInt(fraseScanner.next());
+            count ++;
+        }
         fraseScanner.close();
         return number;
     }
@@ -232,6 +302,58 @@ public class FS25 {
         return number;
     }
 
+    /* Transforms int number input to a String of the crop */
+    public static String cropToString(int number){
+        String crop = "";
+        if (number == 1) {
+            crop = "Aceitunas";
+        } else if (number == 2) {
+            crop = "Algodon";
+        } else if (number == 3) {
+            crop = "Arroz";
+        } else if (number == 4) {
+            crop = "Arroz de Grano Largo";
+        } else if (number == 5) {
+            crop = "Avena";
+        } else if (number == 6) {
+            crop = "Colza";
+        } else if (number == 7) {
+            crop = "Caña de Azucar";
+        } else if (number == 8) {
+            crop = "Cebada";
+        } else if (number == 9) {
+            crop = "Chicharos";
+        } else if (number == 10) {
+            crop = "Espinaca";
+        } else if (number == 11) {
+            crop = "Frijol de Soja";
+        } else if (number == 12) {
+            crop = "Girasol";
+        } else if (number == 13) {
+            crop = "Habichuelas";
+        } else if (number == 14) {
+            crop = "Hierba";
+        } else if (number == 15) {
+            crop = "Maiz";
+        } else if (number == 16) {
+            crop = "Nabo";
+        } else if (number == 17) {
+            crop = "Patatas";
+        } else if (number == 18) {
+            crop = "Remolacha Azucarera";
+        } else if (number == 19) {
+            crop = "Remolacha Roja";
+        } else if (number == 20) {
+            crop = "Sorgo";
+        } else if (number == 21) {
+            crop = "Trigo";
+        } else if (number == 22) {
+            crop = "Uvas";
+        } else if (number == 23) {
+            crop = "Zanahorias";
+        }
+        return crop;
+    }
     /* Shows the selecable menu to work with vehicle info  */
     public static void vehicleMenu(Scanner inpuScanner) {
         boolean option = false;
