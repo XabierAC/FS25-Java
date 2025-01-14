@@ -170,8 +170,32 @@ public class FS25 {
     }
 
     /* Deletes a field from the list */
-    public static void deleteField(Scanner inputScanner, File fileInputField, File fileCopyField) {
+    public static void deleteField(Scanner inputScanner, File fileInputField, File fileCopyField) throws FileNotFoundException {
+        Scanner inputFileScanner = new Scanner(fileInputField);
+        PrintStream filePS = new PrintStream(fileCopyField);
+        consolePS.println("Cual es el campo que quieres eliminar?");
+        int fieldToDelete = Integer.parseInt(inputScanner.nextLine());
+        while (inputFileScanner.hasNextLine()) {
+            String inputFieldString = inputFileScanner.nextLine();
+            int inputFieldInt = stringToInt(inputFieldString, 1);
+            if (inputFieldInt == fieldToDelete) {
+                consolePS.println("El campo ha sido eliminado correctamente");
+            } else {
+                filePS.println(inputFieldString);
+            }
+        }
 
+        filePS.close();
+        inputFileScanner.close();
+        inputFileScanner = new Scanner(fileCopyField);
+        filePS = new PrintStream(fileInputField);
+        while (inputFileScanner.hasNextLine()) {
+            String line = inputFileScanner.nextLine();
+            filePS.println(line);
+        }
+        inputFileScanner.close();
+        filePS.close();
+        fileCopyField.delete();
     }
 
     /* Shows on console all the fields in property and their status and crop info */
