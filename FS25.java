@@ -59,7 +59,7 @@ public class FS25 {
             } else if (selection.startsWith("B")) {
                 deleteField(inpuScanner, fileInputField, fileCopyField);
             } else if (selection.startsWith("M")) {
-                
+                showAllFields(inpuScanner, fileInputField);
             } else if (selection.startsWith("V")) {
                 mainMenu(inpuScanner);
             } else {
@@ -82,7 +82,7 @@ public class FS25 {
         consolePS.println("Cual es el estado actual del campo?");
         statusString = inputScanner.nextLine();
         statusId = fieldStatusToInt(statusString.toUpperCase());
-        if (statusId > 5 && statusId < 11) {
+        if (statusId > 4 && statusId < 11) {
             consolePS.println("Que producto hay plantado?");
             fieldCrop = inputScanner.nextLine().toUpperCase();
             cropId = cropToInt(fieldCrop);
@@ -199,8 +199,20 @@ public class FS25 {
     }
 
     /* Shows on console all the fields in property and their status and crop info */
-    public static void showAllFields(Scanner inputScanner, File fileInputField, File fileCopyField) {
-
+    public static void showAllFields(Scanner inputScanner, File fileInputField) throws FileNotFoundException {
+        Scanner inputFileScanner = new Scanner(fileInputField);
+        while (inputFileScanner.hasNextLine()) {
+            consolePS.println();
+            String fieldToShow = inputFileScanner.nextLine();
+            consolePS.println("Campo " + stringToInt(fieldToShow, 1) + ":");
+            consolePS.println("\tEl estado del campo es: " + fieldStatusToString(stringToInt(fieldToShow, 2)));
+            if (stringToInt(fieldToShow, 2) > 5 && stringToInt(fieldToShow, 2) < 11) {
+                consolePS.println("\tEl cultivo plantado es: " + cropToString(stringToInt(fieldToShow, 3)));
+            } else {
+                consolePS.println("\tEl cultivo a plantar es: " + cropToString(stringToInt(fieldToShow, 3)));
+            }
+        }
+        consolePS.println();
     }
 
     /* Transforms String from fieldStatus input to a number for status identification */
