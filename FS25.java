@@ -60,7 +60,7 @@ public class FS25 {
         do {
             consolePS.println("Que quieres hacer?");
             consolePS.println("Editar los (C)ampos");
-            //consolePS.println("Editar los (V)ehículos");
+            consolePS.println("Editar los (V)ehículos");
             consolePS.println("(S)alir");
             selectedOption = inputScanner.nextLine().toUpperCase();
             if (selectedOption.startsWith("C") || selectedOption.startsWith("V") || selectedOption.startsWith("S")){
@@ -441,18 +441,24 @@ public class FS25 {
     public static void vehicleMenu(Scanner inpuScanner, String game) {
         boolean option = false;
         while (!option) {
-            consolePS.println("****VEHICULOS****");
+            consolePS.println("****IMPLEMENTOS Y VEHICULOS****");
             consolePS.println("Que quieres hacer?");
             consolePS.println("(A)gregar un nuevo vehiculo)");
             consolePS.println("(M)odificar un vehiculo)");
             consolePS.println("(E)liminar un vehiculo)");
             String selection = inpuScanner.nextLine().toUpperCase();
             if (selection.startsWith("A")) {
-                addVehicle(inpuScanner);
+                addVehicle(inpuScanner, game);
+                consolePS.println();
+                option = true;
             } else if (selection.startsWith("M")) {
-                modifyVehicle(inpuScanner);
+                modifyVehicle(inpuScanner, game);
+                consolePS.println();
+                option = true;
             } else if (selection.startsWith("E")) {
-                deleteVehicle(inpuScanner);
+                deleteVehicle(inpuScanner, game);
+                consolePS.println();
+                option = true;
             } else {
                 consolePS.println("El texto introducido no es valido.\nVuelve a intentarlo.");
                 consolePS.println();
@@ -461,17 +467,17 @@ public class FS25 {
     }
 
     /* Adds a new vehicle to the list */
-    public static void addVehicle(Scanner inputScanner) {
+    public static void addVehicle(Scanner inputScanner, String game) {
 
     }
 
     /* Modifies the info of one of the vehicle in the list */
-    public static void modifyVehicle(Scanner inputScanner) {
+    public static void modifyVehicle(Scanner inputScanner, String game) {
 
     }
 
     /* Deletes one of the vehicle in the list */
-    public static void deleteVehicle(Scanner inputScanner) {
+    public static void deleteVehicle(Scanner inputScanner, String game) {
 
     }
 }
