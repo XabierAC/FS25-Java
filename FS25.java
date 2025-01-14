@@ -225,6 +225,7 @@ public class FS25 {
             }
         }
         consolePS.println();
+        inputFileScanner.close();
     }
 
     /* Transforms String from fieldStatus input to a number for status identification */
