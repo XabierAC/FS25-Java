@@ -267,11 +267,11 @@ public class FS25 {
         int statusId = 0;
         if (fieldStatus.equals("DESMENUZADO")) {
             statusId = 1;
-        } else if (fieldStatus.equals("CON CAL")) {
-            statusId = 2;
-        } else if (fieldStatus.equals("ABONO 1")) {
-            statusId = 3;
         } else if (fieldStatus.equals("ARADO") || fieldStatus.equals("CULTIVADO")) {
+            statusId = 2;
+        } else if (fieldStatus.equals("CON CAL")) {
+            statusId = 3;
+        } else if (fieldStatus.equals("ABONO 1")) {
             statusId = 4;
         } else if (fieldStatus.equals("SEMBRADO")) {
             statusId = 5;
@@ -297,11 +297,11 @@ public class FS25 {
         if (number == 1) {
             status = "Desmenuzado";
         } else if (number == 2) {
-            status = "Con cal";
-        } else if (number == 3) {
-            status = "Abono 1";
-        } else if (number == 4) {
             status = "Arado o Cultivado";
+        } else if (number == 3) {
+            status = "Con cal";
+        } else if (number == 4) {
+            status = "Abono 1";
         } else if (number == 5) {
             status = "Sembrado";
         } else if (number == 6) {
