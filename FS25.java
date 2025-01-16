@@ -438,27 +438,30 @@ public class FS25 {
         return crop;
     }
     /* Shows the selecable menu to work with vehicle info  */
-    public static void vehicleMenu(Scanner inpuScanner, String game) {
+    public static void vehicleMenu(Scanner inpuScanner, String game) throws FileNotFoundException{
         boolean option = false;
         while (!option) {
-            consolePS.println("****IMPLEMENTOS Y VEHICULOS****");
+            consolePS.println("****APEROS Y VEHICULOS****");
             consolePS.println("Que quieres hacer?");
-            consolePS.println("(A)gregar un nuevo vehiculo)");
-            consolePS.println("(M)odificar un vehiculo)");
-            consolePS.println("(E)liminar un vehiculo)");
+            consolePS.println("(A)gregar un nuevo vehiculo");
+            consolePS.println("(E)ditar un vehiculo o apero");
+            consolePS.println("(B)orrar un vehiculo o apero");
+            // consolePS.println("(M)ostrar los vehiculos y aperos");
+            consolePS.println("(V)olver atras");
             String selection = inpuScanner.nextLine().toUpperCase();
             if (selection.startsWith("A")) {
                 addVehicle(inpuScanner, game);
                 consolePS.println();
-                option = true;
-            } else if (selection.startsWith("M")) {
+            } else if (selection.startsWith("E")) {
                 modifyVehicle(inpuScanner, game);
                 consolePS.println();
-                option = true;
-            } else if (selection.startsWith("E")) {
+            } else if (selection.startsWith("B")) {
                 deleteVehicle(inpuScanner, game);
                 consolePS.println();
-                option = true;
+            } else if (selection.startsWith("M")) {
+                consolePS.println();
+            } else if (selection.startsWith("V")) {
+                mainMenu(inpuScanner);
             } else {
                 consolePS.println("El texto introducido no es valido.\nVuelve a intentarlo.");
                 consolePS.println();
@@ -477,7 +480,53 @@ public class FS25 {
     }
 
     /* Deletes one of the vehicle in the list */
-    public static void deleteVehicle(Scanner inputScanner, String game) {
+    public static void deleteVehicle(Scanner inputScanner, String game) throws FileNotFoundException {
+        File fileCopyVehicle = new File("/Users/xabierac/Developer/Visual Studio Code/FS25 Java/copyFileVehicle.txt");
+        PrintStream copyVehiclePS = new PrintStream(fileCopyVehicle);
+        consolePS.println();
+        File inputFile = new File("/Users/xabierac/Developer/Visual Studio Code/FS25 Java/vehicle" + game + ".txt");
+        Scanner inputFileScanner = new Scanner(inputFile);
+        consolePS.println("Cual es el que quieres eliminar?");
+        String inputText = inputScanner.nextLine();
+        double vehicleDelete = vehicleToInt(inputText);
+        while (inputFileScanner.hasNextLine()) {
+            String fileLine = inputFileScanner.nextLine();
+            double fileVehicle = Double.parseDouble(selectedText(fileLine, 1));
+            if (vehicleDelete == fileVehicle) {
+                consolePS.println("El vehiculo ha sido eliminado correctamente");
+            } else {
+                copyVehiclePS.println(fileLine);
+            }
+        }
+        inputFileScanner.close();
+        copyVehiclePS.close();
+        Scanner copyFile = new Scanner(fileCopyVehicle);
+        PrintStream filePS = new PrintStream(inputFile);
+        while (copyFile.hasNextLine()) {
+            filePS.println(copyFile.nextLine());
+        }
+        copyFile.close();
+        filePS.close();
+        fileCopyVehicle.delete();
+    }
 
+    /* Method to return the text on the position given */
+    public static String selectedText(String text, int pos){
+        Scanner frase = new Scanner(text);
+        String result = "";
+        int count = 0;
+        while (count < pos) {
+            result = frase.next();
+            count ++;
+        }
+        frase.close();
+        return result;
+    }
+
+    /* Transforms the name identification of the vehicle to a number */
+    public static double vehicleToInt(String vehicle){
+        double result = 0.0;
+
+        return result;
     }
 }
