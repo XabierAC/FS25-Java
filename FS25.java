@@ -470,8 +470,42 @@ public class FS25 {
     }
 
     /* Adds a new vehicle to the list */
-    public static void addVehicle(Scanner inputScanner, String game) {
-
+    public static void addVehicle(Scanner inputScanner, String game) throws FileNotFoundException {
+        boolean copied = false;
+        File fileCopyVehicle = new File("/Users/xabierac/Developer/Visual Studio Code/FS25 Java/copyFileVehicle.txt");
+        PrintStream copyVehiclePS = new PrintStream(fileCopyVehicle);
+        consolePS.println();
+        File inputVehicleFile = new File("/Users/xabierac/Developer/Visual Studio Code/FS25 Java/vehicle" + game + ".txt");
+        Scanner inputFileScanner = new Scanner(inputVehicleFile);
+        consolePS.println("Que vehiculo quiere agregar?");
+        String textToAdd = String.valueOf(vehicleToInt(inputScanner.nextLine()));
+        double orderId = Double.parseDouble(textToAdd);
+        consolePS.println("Cual es la matricula del vehiculo?");
+        textToAdd = textToAdd + " " + inputScanner.nextLine();
+        consolePS.println("Cual es el porcentaje de daño actual del vehiculo?");
+        textToAdd = textToAdd + " " + String.valueOf(inputScanner.nextLine());
+        while (inputFileScanner.hasNextLine()) {
+            String inputFileText = inputFileScanner.nextLine();
+            double fileOrderId = Double.parseDouble(selectedText(inputFileText, 1));
+            if (orderId < fileOrderId) {
+                copyVehiclePS.println(textToAdd);
+                copied = true;
+            }
+            copyVehiclePS.println(inputFileText);
+        }
+        if (!copied) {
+            copyVehiclePS.println(textToAdd);
+        }
+        copyVehiclePS.close();
+        inputFileScanner.close();
+        PrintStream originalPS = new PrintStream(inputVehicleFile);
+        Scanner copyScanner = new Scanner(fileCopyVehicle);
+        while (copyScanner.hasNextLine()) {
+            originalPS.println(copyScanner.nextLine());
+        }
+        copyScanner.close();
+        originalPS.close();
+        fileCopyVehicle.delete();
     }
 
     /* Modifies the info of one of the vehicle in the list */
@@ -526,7 +560,13 @@ public class FS25 {
     /* Transforms the name identification of the vehicle to a number */
     public static double vehicleToInt(String vehicle){
         double result = 0.0;
-
+        if (vehicle.contains("tractor")) {
+            result = 1.0;
+        } else if (vehicle.contains("apero")) {
+            result = 2.0;
+        } else if (vehicle.contains("camion")) {
+            result = 3.0;
+        }
         return result;
     }
 }
