@@ -317,6 +317,7 @@ public class FS25 {
         }
         return status;
     }
+   
     /* Converts from String to int */
     public static int stringToInt(String frase, int repeat) {
         Scanner fraseScanner = new Scanner(frase);
@@ -435,6 +436,7 @@ public class FS25 {
         }
         return crop;
     }
+    
     /* Shows the selecable menu to work with vehicle info  */
     public static void vehicleMenu(Scanner inpuScanner, String game) throws FileNotFoundException{
         boolean option = false;
@@ -476,7 +478,7 @@ public class FS25 {
         File inputVehicleFile = new File("/Users/xabierac/Developer/Visual Studio Code/FS25 Java/vehicle" + game + ".txt");
         Scanner inputFileScanner = new Scanner(inputVehicleFile);
         consolePS.println("Que vehiculo quiere agregar?");
-        String textToAdd = String.valueOf(vehicleToInt(inputScanner.nextLine()));
+        String textToAdd = String.valueOf(Vehicle.getId(inputScanner.nextLine(), inputScanner));
         int orderId = Integer.parseInt(textToAdd);
         consolePS.println("Cual es la matricula del vehiculo?");
         textToAdd = textToAdd + " " + inputScanner.nextLine();
@@ -514,7 +516,7 @@ public class FS25 {
         Scanner inputFileScanner = new Scanner(inputVehicleFile);
         consolePS.println();
         consolePS.println("Que vehiculo quieres modificar?");
-        int vehicleIdInput = vehicleToInt(inputScanner.nextLine());
+        int vehicleIdInput = Vehicle.getId(inputScanner.nextLine(), inputScanner);
         consolePS.println("Que dato quieres modificar?\nMatricula del vehiculo o daño del vehiculo");
         String inputString = inputScanner.nextLine().toUpperCase();
         if(inputString.startsWith("M")) {
@@ -562,8 +564,7 @@ public class FS25 {
         File inputFile = new File("/Users/xabierac/Developer/Visual Studio Code/FS25 Java/vehicle" + game + ".txt");
         Scanner inputFileScanner = new Scanner(inputFile);
         consolePS.println("Cual es el que quieres eliminar?");
-        String inputText = inputScanner.nextLine();
-        int vehicleDelete = vehicleToInt(inputText);
+        int vehicleDelete = Vehicle.getId(inputScanner.nextLine(), inputScanner);
         while (inputFileScanner.hasNextLine()) {
             String fileLine = inputFileScanner.nextLine();
             int fileVehicle = Integer.parseInt(selectedText(fileLine, 1));
@@ -598,16 +599,4 @@ public class FS25 {
         return result;
     }
 
-    /* Transforms the name identification of the vehicle to a number */
-    public static int vehicleToInt(String vehicle){
-        int result = 0;
-        if (vehicle.contains("tractor")) {
-            result = 1;
-        } else if (vehicle.contains("apero")) {
-            result = 2;
-        } else if (vehicle.contains("camion")) {
-            result = 3;
-        }
-        return result;
-    }
 }
